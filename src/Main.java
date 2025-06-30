@@ -4,11 +4,11 @@ public class Main {
         // y precargada elimine todas las secuencias que tienen orden descendente entre
         // sus elementos.
         int[][] matriz ={
-                {1,0,2,3,4,0,0,2,4,0},
-                {0,3,2,4,0,0,0,2,1,0},
+                {0,0,4,3,2,0,0,2,4,0},
+                {0,5,2,1,0,0,0,2,1,0},
                 {0,2,3,2,0,2,2,1,0,0},
                 {0,3,4,2,0,9,2,1,0,0},
-                {0,2,2,2,2,2,2,0,0,0},
+                {0,2,2,2,0,2,2,0,0,0},
         };
         final int MAXF = 5;
         final int MAXC = 10;
@@ -16,7 +16,6 @@ public class Main {
     }
     public static void eliminarSecuenciasDesendientes (int[][] matriz, final int MAXF, final int MAXC) {
         int tamanoSecuencia;
-        boolean estado;
         for (int i = 0; i<MAXF; i++){
             int inicioSecuencia = 0;
             int finSecuencia = -1;
@@ -27,26 +26,37 @@ public class Main {
                 }
                 tamanoSecuencia=((finSecuencia-inicioSecuencia)+1);
                 if (tamanoSecuencia!=1){
-                    if (revisarSecuencia(matriz[i],inicioSecuencia,finSecuencia,tamanoSecuencia,MAXC)){
-                        estado=revisarSecuencia(matriz[i],inicioSecuencia,finSecuencia,tamanoSecuencia, MAXC);
-                        System.out.println(estado);
-                    }
+                    revisarSecuencia(matriz[i],inicioSecuencia,finSecuencia,tamanoSecuencia, MAXC);
                 }
             }
         }
+        mostrarMatriz(matriz,MAXF,MAXC);
     }
-    public static boolean revisarSecuencia (int[] array, int inicio, int fin, int tamanoSecuencia, final int MAXC) {
-        boolean descendente = false;
+    public static void  mostrarMatriz (int[][] matriz, final int MAXF, final int MAXC) {
+        for (int i = 0; i<MAXF; i++){
+            for (int j = 0; j<MAXC; j++){
+                System.out.print(matriz[i][j]+" | ");
+            }
+            System.out.println();
+        }
+    }
+    public static void eliminarSecuencia (int[] array, int inicio, int fin, int tamanoSecuencia) {
+        for (int i = 0; i<=tamanoSecuencia; i++) {
+            for (int j = inicio; j<=fin; j++){
+                array[j]=array[j+1];
+            }
+        }
+    }
+    public static void revisarSecuencia (int[] array, int inicio, int fin, int tamanoSecuencia, final int MAXC) {
         int contador = 0;
-        for (int i = inicio; i<fin-1; i++){
+        for (int i = inicio; i<fin && i<MAXC; i++){
             if (array[i]>array[i+1]){
                 contador++;
             }
         }
         if (contador==tamanoSecuencia-1){
-            descendente = true;
+                eliminarSecuencia(array,inicio,fin, tamanoSecuencia);
         }
-        return descendente;
     }
     public static int buscarInicio (int fin, final int MAXC, int[] array){
         int inicio = fin;
@@ -59,6 +69,6 @@ public class Main {
         while (inicio<MAXC && array[inicio]!=0){
             inicio++;
         }
-        return inicio;
+        return inicio-1;
     }
 }
